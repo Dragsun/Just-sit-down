@@ -4,6 +4,9 @@ using BepInEx.Logging;
 using Reptile;
 using HarmonyLib;
 using UnityEngine;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace JustSitDown
 {
@@ -26,15 +29,18 @@ namespace JustSitDown
         // These will appear in the config file created by BepInEx and can also be used
         // by the OnSettingsChange event to determine which setting has changed.
         public static string KeyboardShortcutExampleKey = "Recall Keyboard Shortcut";
+        public static string KeyboardLayDownKey = "Recall Keyboard Shortcut";
 
         // Configuration entries. Static, so can be accessed directly elsewhere in code via
         // e.g.
         // float myFloat = JustSitDownPlugin.FloatExample.Value;
         // TODO Change this code or remove the code if not required.
         public static ConfigEntry<KeyboardShortcut> KeyboardShortcutExample;
+        public static ConfigEntry<KeyboardShortcut> KeyboardLayDown;
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
         public static ManualLogSource Log = new ManualLogSource(PluginName);
+        public static DieAbility dieAbility;
 
         /// <summary>
         /// Initialise the configuration settings and patch methods
@@ -43,9 +49,8 @@ namespace JustSitDown
         {
             // Keyboard shortcut setting example
             // TODO Change this code or remove the code if not required.
-            KeyboardShortcutExample = Config.Bind("General",
-                KeyboardShortcutExampleKey,
-                new KeyboardShortcut(KeyCode.M));
+            KeyboardShortcutExample = Config.Bind("General",KeyboardShortcutExampleKey,new KeyboardShortcut(KeyCode.M));
+            KeyboardLayDown = Config.Bind("laydown", KeyboardLayDownKey, new KeyboardShortcut(KeyCode.N));
 
             KeyboardShortcutExample.SettingChanged += ConfigSettingChanged;
 
@@ -69,6 +74,7 @@ namespace JustSitDown
         public static Player player { get; set; }
         public static Vector3 playerpos1;
         private float keyPressStartTime = 0f;
+        public static int myAnimationKey = 0;
 
         private void Update()
         {
@@ -103,11 +109,7 @@ namespace JustSitDown
             }
         }
 
-        /// <summary>
-        /// Method to handle changes to configuration made by the player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void ConfigSettingChanged(object sender, System.EventArgs e)
         {
             SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;

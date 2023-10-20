@@ -25,16 +25,5 @@ namespace JustSitDown.Patches
             JustSitDownPlugin.Log.LogInfo("In Player Awake method Prefix.");
             return true;
         }
-
-        [HarmonyPatch(nameof(Player.Awake))]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(Player __instance)
-        {
-            
-            //__instance.ActivateAbility(__instance.sitAbility);
-            
-
-            JustSitDownPlugin.Log.LogInfo("In Player Awake method Postfix.");
-        }
     }
 }

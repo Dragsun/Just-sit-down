@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patches\DieAbilityPatches.cs" />
     <Compile Include="Patches\PlayerPatches.cs" />
     <Compile Include="JustSitDownPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
